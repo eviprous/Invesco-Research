@@ -25,7 +25,7 @@ returns_df = close_df.pct_change().dropna()
 returns_df["Innovation Portfolio"] = returns_df["SPC"] - returns_df["SPE"]
 returns_df = returns_df.iloc[:-1]
 
-print(returns_df.tail())
+print(returns_df.head(10))
 
 
 #upload ff 3 factor data
