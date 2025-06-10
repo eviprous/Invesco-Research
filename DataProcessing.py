@@ -51,14 +51,16 @@ class SP500DataHandler:
     def clean_and_merge(self):
         """Generate two separate cleaned datasets: returns and market cap."""
         # Filter returns to S&P 500 constituents
-        ret_df = self.raw_returns.merge(self.sp500_membership, on='permno', how='left')
-        ret_df = ret_df[(ret_df['date'] >= ret_df['start']) & (ret_df['date'] <= ret_df['ending'])]
-        self.cleaned_returns = ret_df[['permno', 'date', 'ret']].copy()
+        if self.raw_returns is not None:
+            ret_df = self.raw_returns.merge(self.sp500_membership, on='permno', how='left')
+            ret_df = ret_df[(ret_df['date'] >= ret_df['start']) & (ret_df['date'] <= ret_df['ending'])]
+            self.cleaned_returns = ret_df[['permno', 'date', 'ret']].copy()
 
         # Filter market cap to S&P 500 constituents
-        mc_df = self.raw_market_caps.merge(self.sp500_membership, on='permno', how='left')
-        mc_df = mc_df[(mc_df['date'] >= mc_df['start']) & (mc_df['date'] <= mc_df['ending'])]
-        self.cleaned_market_caps = mc_df[['permno', 'date', 'me']].copy()
+        if self.raw_market_caps is not None:
+            mc_df = self.raw_market_caps.merge(self.sp500_membership, on='permno', how='left')
+            mc_df = mc_df[(mc_df['date'] >= mc_df['start']) & (mc_df['date'] <= mc_df['ending'])]
+            self.cleaned_market_caps = mc_df[['permno', 'date', 'me']].copy()
 
     def get_returns_pivot(self):
         """Pivot table of returns: rows = date, columns = permno."""
@@ -92,13 +94,14 @@ if __name__ == '__main__':
     conn = wrds.Connection()
 
     handler = SP500DataHandler(conn)
-    handler.fetch_returns()
     handler.fetch_sp500_membership()
     handler.fetch_market_caps()
     handler.clean_and_merge()
 
-    return_panel = handler.get_returns_pivot()
-    returns_with_tickers = handler.add_tickers(return_panel)
+    cap_panel = handler.get_market_caps_pivot()
+    cap_with_tickers = handler.add_tickers(cap_panel)
 
-    returns_with_tickers.to_csv("sp500_returns_with_tickers.csv")
-    print(returns_with_tickers.columns)
+    cap_with_tickers.to_csv("sp500_market_caps.csv")
+    print(cap_with_tickers.columns)
+
+
