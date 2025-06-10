@@ -16,8 +16,7 @@ start_date = "2005-01-01"
 end_date = "2025-05-31"
 
 # Get adjusted monthly close
-df = yf.download(list(tickers.values()), start=start_date, end=end_date,
-                 auto_adjust=True, interval="1mo")
+df = yf.download(list(tickers.values()), start=start_date, end=end_date, auto_adjust=True, interval="1mo")
 close_df = df["Close"].copy()
 close_df.columns = tickers.keys()
 close_df.dropna(inplace=True)
@@ -31,7 +30,7 @@ print(returns_df.tail())
 
 #upload ff 3 factor data
 
-ff_df = pd.read_csv("../InvescoResearch/Scrapbook/F-F_Research_Data_Factors-2.csv", index_col=0, skiprows=3)
+ff_df = pd.read_csv("F-F_Research_Data_Factors-2.csv", index_col=0, skiprows=3)
 ff_df = ff_df[ff_df.index.astype(str).str.match(r"^\d{6}$")]
 ff_df.index = pd.to_datetime(ff_df.index.astype(str), format="%Y%m")
 ff_df = ff_df.reindex(returns_df.index).dropna()
@@ -55,14 +54,32 @@ excess_rets_df["HML"] = merged_df["HML"]
 
 print(excess_rets_df.head(10))
 
-def compute_rolling_betas_and_alpha(excess_returns_df, portfolio_col, window=12):
-    '''Computes 12 month rolling beta to ff factors'''
-    results = {
-        "alpha": [],
-        # "beta_MKT": [],
-        "beta_SMB": [],
-        "beta_HML": [],
+def compute_rolling_betas_and_alpha(
+    excess_returns_df,
+    portfolio_col,
+    window=12,
+    beta_MKT=False,
+    beta_SMB=True,
+    beta_HML=True,
+    beta_RMW=False,
+    beta_CMA=False,
+    beta_Momentum=False
+):
+    """computes rolling betas and alphas"""
+    factor_flags = {
+        "Mkt-RF": beta_MKT,
+        "SMB": beta_SMB,
+        "HML": beta_HML,
+        "RMW": beta_RMW,
+        "CMA": beta_CMA,
+        "Mom": beta_Momentum
     }
+
+    selected_factors = [factor for factor, include in factor_flags.items() if include]
+
+    results = {"alpha": []}
+    for factor in selected_factors:
+        results[f"beta_{factor}"] = []
 
     index = []
 
@@ -70,22 +87,22 @@ def compute_rolling_betas_and_alpha(excess_returns_df, portfolio_col, window=12)
         window_df = excess_returns_df.iloc[i - window:i]
 
         y = window_df[portfolio_col]
-        X = window_df[["SMB", "HML"]]
+        X = window_df[selected_factors]
         X = sm.add_constant(X)
 
         model = sm.OLS(y, X).fit()
-        results["alpha"].append(model.params["const"])
-        # results["beta_MKT"].append(model.params["Mkt-RF"])
-        results["beta_SMB"].append(model.params["SMB"])
-        results["beta_HML"].append(model.params["HML"])
+
+        results["alpha"].append(model.params.get("const", float("nan")))
+        for factor in selected_factors:
+            results[f"beta_{factor}"].append(model.params.get(factor, float("nan")))
 
         index.append(excess_returns_df.index[i])
 
     return pd.DataFrame(results, index=index)
 
-rolling_factors_innovation = compute_rolling_betas_and_alpha(excess_rets_df, "Innovation Portfolio")
-rolling_factors_SPE = compute_rolling_betas_and_alpha(excess_rets_df, "SPE")
-rolling_factors_SPC = compute_rolling_betas_and_alpha(excess_rets_df, "SPC")
+rolling_factors_innovation = compute_rolling_betas_and_alpha(excess_rets_df, "Innovation Portfolio", window=36)
+rolling_factors_SPE = compute_rolling_betas_and_alpha(excess_rets_df, "SPE", window=36)
+rolling_factors_SPC = compute_rolling_betas_and_alpha(excess_rets_df, "SPC", window=36)
 
 #Print and show betas over time
 print(rolling_factors_innovation.head())
