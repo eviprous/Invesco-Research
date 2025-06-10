@@ -30,7 +30,7 @@ print(returns_df.tail())
 
 #upload ff 3 factor data
 
-ff_df = pd.read_csv("F-F_Research_Data_Factors-2.csv", index_col=0, skiprows=3)
+ff_df = pd.read_csv("F-F_Research_Data_5_Factors_2x3.csv", index_col=0, skiprows=3)
 ff_df = ff_df[ff_df.index.astype(str).str.match(r"^\d{6}$")]
 ff_df.index = pd.to_datetime(ff_df.index.astype(str), format="%Y%m")
 ff_df = ff_df.reindex(returns_df.index).dropna()
@@ -51,6 +51,8 @@ excess_rets_df["Innovation Portfolio"] = merged_df["Innovation Portfolio"] - mer
 excess_rets_df["Mkt-RF"] = merged_df["Mkt-RF"]
 excess_rets_df["SMB"] = merged_df["SMB"]
 excess_rets_df["HML"] = merged_df["HML"]
+excess_rets_df["RMW"] = merged_df["RMW"]
+excess_rets_df["CMA"] = merged_df["CMA"]
 
 print(excess_rets_df.head(10))
 
@@ -61,8 +63,8 @@ def compute_rolling_betas_and_alpha(
     beta_MKT=False,
     beta_SMB=True,
     beta_HML=True,
-    beta_RMW=False,
-    beta_CMA=False,
+    beta_RMW=True,
+    beta_CMA=True,
     beta_Momentum=False
 ):
     """computes rolling betas and alphas"""
