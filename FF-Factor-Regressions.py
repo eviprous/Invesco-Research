@@ -12,6 +12,7 @@ tickers = {
     "SPC": "^GSPC",  # Cap-weighted index
     "SPE": "RSP"     # Equal-weight ETF
 }
+
 start_date = "2005-01-01"
 end_date = "2025-05-31"
 
@@ -102,19 +103,78 @@ def compute_rolling_betas_and_alpha(
 
     return pd.DataFrame(results, index=index)
 
-rolling_factors_innovation = compute_rolling_betas_and_alpha(excess_rets_df, "Innovation Portfolio", window=36)
-rolling_factors_SPE = compute_rolling_betas_and_alpha(excess_rets_df, "SPE", window=36)
+rolling_factors_innovation = compute_rolling_betas_and_alpha(excess_rets_df, "Innovation Portfolio", window=12)
+
+
+rolling_factors_innovation24 = compute_rolling_betas_and_alpha(excess_rets_df, "Innovation Portfolio", window=24)
+
+
+rolling_factors_innovation36 = compute_rolling_betas_and_alpha(excess_rets_df, "Innovation Portfolio", window=36)
+
+
+rolling_factors_SPE = compute_rolling_betas_and_alpha(excess_rets_df, "SPE", window=12)
+
+rolling_factors_SPE24 = compute_rolling_betas_and_alpha(excess_rets_df, "SPE", window=24)
+
+
+rolling_factors_SPE36 = compute_rolling_betas_and_alpha(excess_rets_df, "SPE", window=36)
+
 rolling_factors_SPC = compute_rolling_betas_and_alpha(excess_rets_df, "SPC", window=36)
-
-#Print and show betas over time
-print(rolling_factors_innovation.head())
-
-rolling_factors_innovation.plot(title="12-Month Rolling Alpha and Betas: Innovation Portfolio")
+rolling_factors_SPC.plot(title="36-Month Rolling Alpha and Betas: SPC")
 plt.xlabel("Date")
 plt.ylabel("Factor Exposure / Alpha")
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+#Print and show betas over time
+print(rolling_factors_innovation.head())
+
+rolling_factor_difference = rolling_factors_innovation - rolling_factors_SPE
+rolling_factor_difference.plot(title="12-Month Rolling Alpha and Betas: Difference")
+plt.xlabel("Date")
+plt.ylabel("Factor Exposure / Alpha")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+
+rolling_factor_difference24 = rolling_factors_innovation24 - rolling_factors_SPE24
+rolling_factor_difference24.plot(title="24-Month Rolling Alpha and Betas: Difference 24")
+plt.xlabel("Date")
+plt.ylabel("Factor Exposure / Alpha")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+rolling_factor_difference36 = rolling_factors_SPE36 - rolling_factors_innovation36
+rolling_factor_difference36.plot(title="36-Month Rolling Alpha and Betas: Difference 36")
+plt.xlabel("Date")
+plt.ylabel("Factor Exposure / Alpha")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# rolling_factors_innovation.plot(title="12-Month Rolling Alpha and Betas: Innovation Portfolio")
+# plt.xlabel("Date")
+# plt.ylabel("Factor Exposure / Alpha")
+# plt.grid(True)
+# plt.tight_layout()
+# plt.show()
+#
+# rolling_factors_innovation24.plot(title="24-Month Rolling Alpha and Betas: Innovation Portfolio")
+# plt.xlabel("Date")
+# plt.ylabel("Factor Exposure / Alpha")
+# plt.grid(True)
+# plt.tight_layout()
+# plt.show()
+#
+# rolling_factors_innovation36.plot(title="36-Month Rolling Alpha and Betas: Innovation Portfolio")
+# plt.xlabel("Date")
+# plt.ylabel("Factor Exposure / Alpha")
+# plt.grid(True)
+# plt.tight_layout()
+# plt.show()
 
 rolling_factors_SPE.plot(title="12-Month Rolling Alpha and Betas: SPE")
 plt.xlabel("Date")
@@ -123,12 +183,20 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-rolling_factors_SPC.plot(title="12-Month Rolling Alpha and Betas: SPC")
+rolling_factors_SPE24.plot(title="24-Month Rolling Alpha and Betas: SPE")
 plt.xlabel("Date")
 plt.ylabel("Factor Exposure / Alpha")
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+rolling_factors_SPE36.plot(title="36-Month Rolling Alpha and Betas: SPE")
+plt.xlabel("Date")
+plt.ylabel("Factor Exposure / Alpha")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
 
 
 
@@ -306,4 +374,6 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+
 
