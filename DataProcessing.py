@@ -9,7 +9,7 @@ import wrds
 
 
 class SP500DataHandler:
-    def __init__(self, wrds_conn, start = '2005-01-01', end = '2025-05-31', frequency = 'M'):
+    def __init__(self, wrds_conn, start = '1960-01-01', end = '2025-05-31', frequency = 'M'):
         self.conn = wrds_conn
         self.start = start
         self.end = end
@@ -95,13 +95,13 @@ if __name__ == '__main__':
 
     handler = SP500DataHandler(conn)
     handler.fetch_sp500_membership()
-    handler.fetch_market_caps()
+    handler.fetch_returns()
     handler.clean_and_merge()
 
-    cap_panel = handler.get_market_caps_pivot()
-    cap_with_tickers = handler.add_tickers(cap_panel)
+    ret_panel = handler.get_returns_pivot()
+    ret_with_tickers = handler.add_tickers(ret_panel)
 
-    cap_with_tickers.to_csv("sp500_market_caps.csv")
-    print(cap_with_tickers.columns)
+    ret_with_tickers.to_csv("sp500_returns_with_tickers.csv")
+    print(ret_with_tickers.columns)
 
 
