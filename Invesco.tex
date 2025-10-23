@@ -26,14 +26,17 @@
 \title{Equal Beta Contribution vs Capital-Weighted Portfolio: \\ 
 A Cross-Sectional Analysis of Risk Allocation}
 
-\author{Santiago Díaz Tolivia, Paraskevi Maria Prousanidou, Zuqing Wei \inst{1} \and Kenneth A. Blay, Sebastian Lehner, Joshua Kothe,  Sarp Yanki Kalfa\inst{2}}
+\author{Santiago Díaz Tolivia, Evi Prousanidou, Zuqing Wei \inst{1} \and Kenneth A. Blay, Sebastian Lehner, Joshua Kothe,  Sarp Yanki Kalfa\inst{2}}
 \institute[shortinst]{\inst{1} Boston University MSMFT \samelineand \inst{2} Invesco Asset Management}
 
 \footercontent{
-  \href{mailto:klauswei@bu.edu}{klauswei@bu.edu} \hfill
-  Invesco Quantitative Research Project, Boston University 2025 \hfill
-  \href{https://github.com/anishathalye/gemini}{Theme: Gemini Poster}
+  \href{mailto:klauswei@bu.edu}{klauswei@bu.edu} \,|\, 
+  \href{mailto:santidt@bu.edu}{santidt@bu.edu} \,|\, 
+  \href{mailto:eviprous@bu.edu}{eviprous@bu.edu} \,|\, 
+  \href{mailto:Kenneth.Blay@invesco.com}{Kenneth.Blay@invesco.com} \hfill
+  Invesco Quantitative Research Project, Boston University 2025
 }
+
 
 % \logoleft{\includegraphics[height=6cm]{bu_logo.pdf}}
 % \logoright{\includegraphics[height=6cm]{invesco_logo.pdf}}
@@ -52,17 +55,20 @@ A Cross-Sectional Analysis of Risk Allocation}
 Traditional \textbf{capital-weighted portfolios (CW)} often lead to concentrated exposures, 
 where a few large-cap stocks dominate overall portfolio risk. 
 This imbalance raises the question of whether alternative weighting schemes can achieve 
-better \textbf{risk efficiency} and \textbf{return stability} without sacrificing exposure to market factors. 
+better \textbf{risk efficiency} and \textbf{return stability} without sacrificing exposure to market factors.  
 
-The \textbf{Equal Beta Contribution (EBC)} approach provides a systematic way to equalize 
-risk contributions across assets, aiming for more balanced beta exposures 
-and improved portfolio diversification. 
+Beyond risk concentration, CW portfolios may also embed \textbf{investor preference effects}, 
+as capital naturally flows toward favored or crowded assets. 
+To isolate these preference-driven components, we construct a \textbf{no-preference portfolio}—
+using \textbf{Equal Beta Contribution (EBC)} or \textbf{Equal-Weighted (EW)} frameworks—
+as a neutral benchmark that reflects market risk allocation absent preference biases.  
 
-This study evaluates how EBC compares to CW and \textbf{Equal-Weighted (EW)} portfolios 
-in terms of \textbf{Sharpe ratio, volatility, and factor-adjusted performance}, 
-using data from the S\&P 500 universe.
+This study evaluates how such preference-neutral portfolios differ from CW in terms of 
+\textbf{Sharpe ratio, volatility, and factor-adjusted performance}, providing a foundation for 
+identifying and quantifying systematic \textbf{preference effects} within the S\&P 500 universe.
 
 \end{block}
+
 
 
 \begin{block}{Data Description}
@@ -73,10 +79,22 @@ using data from the S\&P 500 universe.
 \end{itemize}
 \end{block}
 
-\begin{block}{Hypothesis}
-\textit{H\textsubscript{0}}: EBC portfolios do not outperform CW portfolios in risk-adjusted terms.  
-\textit{H\textsubscript{1}}: EBC portfolios yield higher Sharpe ratios and lower systematic beta exposure.
+\begin{block}{Research Goal}
+
+This project aims to empirically isolate the \textbf{preference component} embedded 
+in the traditional \textbf{capital-weighted (CW)} portfolio by contrasting it with 
+\textbf{no-preference benchmarks}.  
+While CW portfolios reflect both systematic risk allocation and investor preference concentration, 
+the \textbf{Equal Beta Contribution (EBC)} and \textbf{Equal-Weighted (EW)} portfolios represent 
+neutral, preference-free constructions.  
+
+By decomposing CW returns relative to these benchmarks, we identify the portion of performance 
+attributable to \textbf{investor preference biases}, rather than pure market risk exposure.  
+The study further examines how such preference-induced differences evolve across market regimes 
+and affect portfolio efficiency metrics such as \textbf{Sharpe ratio, volatility, and factor-adjusted alpha}.
+
 \end{block}
+
 
 \end{column}
 \separatorcolumn
@@ -85,34 +103,70 @@ using data from the S\&P 500 universe.
 \begin{column}{\colwidth}
 
 \begin{block}{Methodology}
-Weights under the Equal Beta Contribution framework are defined as:
-\[
-w_i = \frac{\frac{1}{\beta_i}}{\sum_j \frac{1}{\beta_j}}
-\]
 
-We compute:
+\textbf{Portfolio Construction:}
 \begin{itemize}
-  \item Rolling monthly betas via CAPM regression
-  \item Cross-sectional Fama–MacBeth regressions
-  \item HAC-adjusted t-statistics for factor loadings
+  \item Build three portfolios from the S\&P 500 universe: 
+  \textbf{CW}, \textbf{EW}, and \textbf{EBC}.
+  \item Estimate rolling betas via 60-day CAPM regressions.
+  \item Define EBC weights as 
+  \[
+  w_i = \frac{1/\beta_i}{\sum_j 1/\beta_j}
+  \]
+  to equalize beta risk contributions.
 \end{itemize}
+
+\textbf{Preference Decomposition:}
+\begin{itemize}
+  \item Treat CW as containing both \textbf{systematic risk} and 
+  \textbf{preference-driven} components.
+  \item Use EBC / EW as \textbf{no-preference benchmarks} to isolate:
+  \[
+  R^{pref}_t = R_{CW,t} - R_{NP,t}.
+  \]
+\end{itemize}
+
+\textbf{Performance Evaluation:}
+\begin{itemize}
+  \item Compare \textbf{Sharpe ratio}, \textbf{volatility}, and 
+  \textbf{FF5+MOM factor-adjusted} alpha.
+  \item Examine \textbf{rolling windows} to capture time-varying preference effects.
+\end{itemize}
+
 \end{block}
 
-\begin{block}{Empirical Model}
-\[
-R_{p,t} - R_{f,t} = \alpha + \beta_{MKT}(R_{MKT,t} - R_{f,t}) + \sum_{k}\beta_k F_{k,t} + \varepsilon_t
-\]
-
-Factors include MKT–RF, SMB, HML, RMW, CMA, and MOM.
-\end{block}
 
 \begin{block}{Implementation}
+
+All portfolio construction and analysis are implemented in \textbf{Python} 
+for reproducibility and efficiency.
+
+\textbf{Data:}
 \begin{itemize}
-  \item Python + Pandas for data pipeline
-  \item Statsmodels for regression
-  \item Rolling window estimation: 12-month overlapping
+  \item Daily prices and market caps for S\&P 500 constituents (1960–2025).
+  \item Aligned trading dates, handled missing data, computed log returns and rolling betas.
 \end{itemize}
+
+\textbf{Portfolio Construction:}
+\begin{itemize}
+  \item Built \textbf{CW}, \textbf{EW}, and \textbf{EBC} portfolios with daily rebalancing.
+  \item EBC weights: \( w_i = \frac{1/\beta_i}{\sum_j 1/\beta_j} \) to equalize beta contributions.
+  \item Constructed preference-neutral benchmarks and 
+  \[
+  R^{pref}_t = R_{CW,t} - R_{NP,t}.
+  \]
+\end{itemize}
+
+\textbf{Evaluation:}
+\begin{itemize}
+  \item Compared Sharpe ratio, volatility, and FF5+MOM-adjusted alpha.
+  \item Used HAC-corrected regressions and rolling windows to track preference dynamics.
+\end{itemize}
+
+\textbf{Tools:}
+\texttt{Pandas}, \texttt{NumPy}, \texttt{Statsmodels}, \texttt{Matplotlib}, \texttt{Plotly} .
 \end{block}
+
 
 \end{column}
 \separatorcolumn
@@ -120,27 +174,39 @@ Factors include MKT–RF, SMB, HML, RMW, CMA, and MOM.
 % ========== Column 3 ==========
 \begin{column}{\colwidth}
 
-\begin{block}{Key Results}
+\begin{block}{Results \& Findings}
+
+\textbf{Performance Summary:}
 \begin{itemize}
-  \item EBC portfolios exhibit an average annualized Sharpe ratio of 1.32 vs 1.07 (CW)
-  \item Lower volatility: σ(EBC) = 0.87 × σ(CW)
-  \item α\_annualized = 2.1\% (t = 2.45, HAC-corrected)
+  \item EBC portfolios achieve higher risk-adjusted returns:
+  annualized Sharpe ratio \(1.32\) vs \(1.07\) for CW.
+  \item Lower volatility: \(\sigma_{EBC} = 0.87 \times \sigma_{CW}\).
+  \item Positive alpha relative to CW:
+  \(\alpha_{annualized} = 2.1\% \ (t = 2.45, \text{HAC-corrected})\).
 \end{itemize}
 
-%\begin{figure}
-  %\centering
-  %\includegraphics[width=0.9\linewidth]{results_plot.png}
-  %\caption{Sharpe Ratio Comparison: CW vs EBC (2010–2025)}
-%\end{figure}
+\textbf{Preference Insights:}
+\begin{itemize}
+  \item The residual \(\,R^{pref}_t = R_{CW,t} - R_{EBC,t}\,\) captures 
+  preference-driven deviations from systematic allocation.
+  \item Preference returns show regime-dependent behavior — stronger in bull phases, 
+  mean-reverting in stressed markets.
+\end{itemize}
+
+\textbf{Factor and Risk Structure:}
+\begin{itemize}
+  \item EBC shows lower exposure to \textbf{market beta}, 
+  and smaller loadings on \textbf{size} and \textbf{value} factors.
+  \item Improved mean-variance efficiency and downside protection versus CW.
+\end{itemize}
+
+\textbf{Next Steps:}
+\begin{itemize}
+  \item Apply Bayesian shrinkage on rolling beta estimates.
+  \item Decompose preference risk into style-based and crowding components.
+\end{itemize}
+
 \end{block}
-
-\begin{alertblock}{Conclusion}
-\begin{itemize}
-  \item EBC outperforms CW in both mean-variance efficiency and downside risk.
-  \item Factor loadings reveal lower market beta and smaller exposure to size and value factors.
-  \item Next step: Bayesian shrinkage on β estimates and multi-factor risk decomposition.
-\end{itemize}
-\end{alertblock}
 
 \begin{block}{References}
 \footnotesize
