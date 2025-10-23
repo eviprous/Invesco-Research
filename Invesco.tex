@@ -1,0 +1,164 @@
+% ====================================
+% Invesco Quantitative Research Project Poster
+% Theme: Gemini (https://github.com/anishathalye/gemini)
+% ====================================
+
+\documentclass[final]{beamer}
+
+% ============= Packages =============
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[size=custom,width=120,height=72,scale=1.0]{beamerposter}
+\usepackage{beamerthemegemini}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{anyfontsize}
+
+% ============= Layout =============
+\newlength{\sepwidth}
+\newlength{\colwidth}
+\setlength{\sepwidth}{0.025\paperwidth}
+\setlength{\colwidth}{0.3\paperwidth}
+\newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
+
+% ============= Title Info =============
+\title{Equal Beta Contribution vs Capital-Weighted Portfolio: \\ 
+A Cross-Sectional Analysis of Risk Allocation}
+
+\author{Santiago Díaz Tolivia, Paraskevi Maria Prousanidou, Zuqing Wei \inst{1} \and Kenneth A. Blay, Sebastian Lehner, Joshua Kothe,  Sarp Yanki Kalfa\inst{2}}
+\institute[shortinst]{\inst{1} Boston University MSMFT \samelineand \inst{2} Invesco Asset Management}
+
+\footercontent{
+  \href{mailto:klauswei@bu.edu}{klauswei@bu.edu} \hfill
+  Invesco Quantitative Research Project, Boston University 2025 \hfill
+  \href{https://github.com/anishathalye/gemini}{Theme: Gemini Poster}
+}
+
+% \logoleft{\includegraphics[height=6cm]{bu_logo.pdf}}
+% \logoright{\includegraphics[height=6cm]{invesco_logo.pdf}}
+
+% ============= Document Starts =============
+\begin{document}
+\begin{frame}[t]
+\begin{columns}[t]
+\separatorcolumn
+
+% ========== Column 1 ==========
+\begin{column}{\colwidth}
+
+\begin{block}{Motivation}
+
+Traditional \textbf{capital-weighted portfolios (CW)} often lead to concentrated exposures, 
+where a few large-cap stocks dominate overall portfolio risk. 
+This imbalance raises the question of whether alternative weighting schemes can achieve 
+better \textbf{risk efficiency} and \textbf{return stability} without sacrificing exposure to market factors. 
+
+The \textbf{Equal Beta Contribution (EBC)} approach provides a systematic way to equalize 
+risk contributions across assets, aiming for more balanced beta exposures 
+and improved portfolio diversification. 
+
+This study evaluates how EBC compares to CW and \textbf{Equal-Weighted (EW)} portfolios 
+in terms of \textbf{Sharpe ratio, volatility, and factor-adjusted performance}, 
+using data from the S\&P 500 universe.
+
+\end{block}
+
+
+\begin{block}{Data Description}
+\begin{itemize}
+  \item S\&P 500 constituent returns (1960–2025)
+  \item S\&P 500 Market Caps (1960–2025)
+  \item FF5 + Momentum factors (Kenneth French Library)
+\end{itemize}
+\end{block}
+
+\begin{block}{Hypothesis}
+\textit{H\textsubscript{0}}: EBC portfolios do not outperform CW portfolios in risk-adjusted terms.  
+\textit{H\textsubscript{1}}: EBC portfolios yield higher Sharpe ratios and lower systematic beta exposure.
+\end{block}
+
+\end{column}
+\separatorcolumn
+
+% ========== Column 2 ==========
+\begin{column}{\colwidth}
+
+\begin{block}{Methodology}
+Weights under the Equal Beta Contribution framework are defined as:
+\[
+w_i = \frac{\frac{1}{\beta_i}}{\sum_j \frac{1}{\beta_j}}
+\]
+
+We compute:
+\begin{itemize}
+  \item Rolling monthly betas via CAPM regression
+  \item Cross-sectional Fama–MacBeth regressions
+  \item HAC-adjusted t-statistics for factor loadings
+\end{itemize}
+\end{block}
+
+\begin{block}{Empirical Model}
+\[
+R_{p,t} - R_{f,t} = \alpha + \beta_{MKT}(R_{MKT,t} - R_{f,t}) + \sum_{k}\beta_k F_{k,t} + \varepsilon_t
+\]
+
+Factors include MKT–RF, SMB, HML, RMW, CMA, and MOM.
+\end{block}
+
+\begin{block}{Implementation}
+\begin{itemize}
+  \item Python + Pandas for data pipeline
+  \item Statsmodels for regression
+  \item Rolling window estimation: 12-month overlapping
+\end{itemize}
+\end{block}
+
+\end{column}
+\separatorcolumn
+
+% ========== Column 3 ==========
+\begin{column}{\colwidth}
+
+\begin{block}{Key Results}
+\begin{itemize}
+  \item EBC portfolios exhibit an average annualized Sharpe ratio of 1.32 vs 1.07 (CW)
+  \item Lower volatility: σ(EBC) = 0.87 × σ(CW)
+  \item α\_annualized = 2.1\% (t = 2.45, HAC-corrected)
+\end{itemize}
+
+%\begin{figure}
+  %\centering
+  %\includegraphics[width=0.9\linewidth]{results_plot.png}
+  %\caption{Sharpe Ratio Comparison: CW vs EBC (2010–2025)}
+%\end{figure}
+\end{block}
+
+\begin{alertblock}{Conclusion}
+\begin{itemize}
+  \item EBC outperforms CW in both mean-variance efficiency and downside risk.
+  \item Factor loadings reveal lower market beta and smaller exposure to size and value factors.
+  \item Next step: Bayesian shrinkage on β estimates and multi-factor risk decomposition.
+\end{itemize}
+\end{alertblock}
+
+\begin{block}{References}
+\footnotesize
+\begin{thebibliography}{9}
+\bibitem{demiguel2009}
+DeMiguel, V., Garlappi, L., \& Uppal, R. (2009).  
+\textit{Optimal versus naive diversification: How inefficient is the 1/N portfolio strategy?}  
+Review of Financial Studies, 22(5), 1915–1953.
+
+\bibitem{clarke2013}
+Clarke, R., de Silva, H., \& Thorley, S. (2013).  
+\textit{Risk parity, portfolio diversification, and the economic foundations of the risk budgeting process.}  
+Journal of Portfolio Management, 39(3), 39–53.
+\end{thebibliography}
+\end{block}
+
+\end{column}
+\separatorcolumn
+\end{columns}
+\end{frame}
+\end{document}
