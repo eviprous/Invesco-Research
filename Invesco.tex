@@ -6,25 +6,64 @@
 \documentclass[final]{beamer}
 
 % ============= Packages =============
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
+\usepackage{fontspec}
 \usepackage[size=custom,width=120,height=72,scale=1.0]{beamerposter}
 \usepackage{beamerthemegemini}
+
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Times New Roman}
+\setsansfont{Helvetica}
+\renewfontfamily\Raleway{Helvetica}
+
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{anyfontsize}
+\usepackage{xcolor}
+
+\definecolor{bured}{RGB}{204,0,0}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{headline}{bg=bured, fg=white}
+\setbeamercolor{footline}{bg=bured, fg=white}
+\setbeamerfont{headline}{series=\bfseries}
+\setbeamerfont{footline}{size=\small}
+
+\setbeamercolor{block title}{bg=bured, fg=white}
+\setbeamercolor{block title alerted}{bg=bured, fg=white}
+\setbeamercolor{block title example}{bg=bured, fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamercolor{block body}{bg=white, fg=black}
+\setbeamercolor{block body alerted}{bg=white, fg=black}
+\setbeamercolor{block body example}{bg=white, fg=black}
+
+\setbeamercolor{structure}{fg=bured}       
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{itemize subitem}[circle]
+
+\hypersetup{colorlinks=true, urlcolor=white, linkcolor=white}
+
+
+% ===== 字体层次设置（推荐）=====
+\setbeamerfont{title}{size=\fontsize{40}{45}\selectfont, series=\bfseries}
+\setbeamerfont{author}{size=\LARGE}
+\setbeamerfont{institute}{size=\Large}
+\setbeamerfont{block title}{size=\Large, series=\bfseries}
+%\setbeamerfont{block body}{size=\large}
+%\setbeamerfont{normal text}{size=\large}
+\setbeamerfont{footline}{size=\footnotesize}
 
 % ============= Layout =============
 \newlength{\sepwidth}
 \newlength{\colwidth}
-\setlength{\sepwidth}{0.025\paperwidth}
-\setlength{\colwidth}{0.3\paperwidth}
+\setlength{\sepwidth}{0.03\paperwidth}
+\setlength{\colwidth}{0.29\paperwidth}
 \newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
 
 % ============= Title Info =============
-\title{Equal Beta Contribution vs Capital-Weighted Portfolio: \\ 
+\title{\textcolor{bured}{Equal Beta Contribution vs Capital-Weighted Portfolio:}\\ 
 A Cross-Sectional Analysis of Risk Allocation}
+
 
 \author{Santiago Díaz Tolivia, Evi Prousanidou, Zuqing Wei \inst{1} \and Kenneth A. Blay, Sebastian Lehner, Joshua Kothe,  Sarp Yanki Kalfa\inst{2}}
 \institute[shortinst]{\inst{1} Boston University MSMFT \samelineand \inst{2} Invesco Asset Management}
@@ -108,7 +147,7 @@ and affect portfolio efficiency metrics such as \textbf{Sharpe ratio, volatility
 \begin{itemize}
   \item Build three portfolios from the S\&P 500 universe: 
   \textbf{CW}, \textbf{EW}, and \textbf{EBC}.
-  \item Estimate rolling betas via 60-day CAPM regressions.
+  \item Estimate rolling betas via 36m/60m Fama Mcbeth regressions.
   \item Define EBC weights as 
   \[
   w_i = \frac{1/\beta_i}{\sum_j 1/\beta_j}
@@ -143,7 +182,7 @@ for reproducibility and efficiency.
 
 \textbf{Data:}
 \begin{itemize}
-  \item Daily prices and market caps for S\&P 500 constituents (1960–2025).
+  \item Monthly prices and market caps for S\&P 500 constituents (1960–2025).
   \item Aligned trading dates, handled missing data, computed log returns and rolling betas.
 \end{itemize}
 
