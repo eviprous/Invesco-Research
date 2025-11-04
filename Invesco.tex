@@ -1,26 +1,29 @@
 % ====================================
 % Invesco Quantitative Research Project Poster
-% Theme: Gemini (https://github.com/anishathalye/gemini)
+% Optimized Gemini Theme Styling
 % ====================================
 
 \documentclass[final]{beamer}
 
-% ============= Packages =============
+% ===== Packages =====
 \usepackage{fontspec}
 \usepackage[size=custom,width=120,height=72,scale=1.0]{beamerposter}
 \usepackage{beamerthemegemini}
 
+% ===== Fonts =====
 \defaultfontfeatures{Ligatures=TeX}
 \setmainfont{Times New Roman}
 \setsansfont{Helvetica}
 \renewfontfamily\Raleway{Helvetica}
 
+% ===== Basic Packages =====
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{anyfontsize}
 \usepackage{xcolor}
 
+% ===== Colors =====
 \definecolor{bured}{RGB}{204,0,0}
 \setbeamercolor{background canvas}{bg=white}
 \setbeamercolor{headline}{bg=bured, fg=white}
@@ -37,23 +40,41 @@
 \setbeamercolor{block body alerted}{bg=white, fg=black}
 \setbeamercolor{block body example}{bg=white, fg=black}
 
-\setbeamercolor{structure}{fg=bured}       
+\setbeamercolor{structure}{fg=bured}
 \setbeamertemplate{itemize items}[circle]
 \setbeamertemplate{itemize subitem}[circle]
 
 \hypersetup{colorlinks=true, urlcolor=white, linkcolor=white}
 
-
-% ===== 字体层次设置（推荐）=====
+% ===== Font Sizes =====
 \setbeamerfont{title}{size=\fontsize{40}{45}\selectfont, series=\bfseries}
 \setbeamerfont{author}{size=\LARGE}
 \setbeamerfont{institute}{size=\Large}
 \setbeamerfont{block title}{size=\Large, series=\bfseries}
-%\setbeamerfont{block body}{size=\large}
-%\setbeamerfont{normal text}{size=\large}
 \setbeamerfont{footline}{size=\footnotesize}
 
-% ============= Layout =============
+% ===== Centered Title, Left-Aligned Body =====
+\makeatletter
+\setbeamertemplate{block begin}{
+  \vskip0.6em
+  % --- Centered block title bar ---
+  \begin{beamercolorbox}[wd=\linewidth, center, colsep*=0pt, sep=20pt]{block title}
+    \usebeamerfont*{block title}\insertblocktitle
+  \end{beamercolorbox}
+  \vspace{-0.35em}
+  % --- Left-aligned block body ---
+  \begin{beamercolorbox}[wd=\linewidth, leftskip=0.75em, rightskip=0.75em,
+                         colsep*=0pt, sep=0.5em]{block body}
+}
+\setbeamertemplate{block end}{
+  \end{beamercolorbox}
+  \vspace{0.6em}
+}
+\makeatother
+
+
+
+% ===== Layout =====
 \newlength{\sepwidth}
 \newlength{\colwidth}
 \setlength{\sepwidth}{0.03\paperwidth}
@@ -65,7 +86,7 @@
 A Cross-Sectional Analysis of Risk Allocation}
 
 
-\author{Santiago Díaz Tolivia, Evi Prousanidou, Zuqing Wei \inst{1} \and Kenneth A. Blay, Sebastian Lehner, Joshua Kothe,  Sarp Yanki Kalfa\inst{2}}
+\author{Santiago Díaz Tolivia, Evi Prousanidou, Zuqing Wei \inst{1} \and Kenneth A. Blay, Dr. Sebastian Lehner, Joshua Kothe,  Sarp Yanki Kalfa\inst{2}}
 \institute[shortinst]{\inst{1} Boston University MSMFT \samelineand \inst{2} Invesco Asset Management}
 
 \footercontent{
